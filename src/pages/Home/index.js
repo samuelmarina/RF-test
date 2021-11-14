@@ -10,18 +10,19 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState();
 
+  const getEvents = async () => {
+    try {
+      setIsLoading(true);
+      const resp = await axios.get("/");
+      setIsLoading(false);
+      setCurrentEvents(resp.data);
+    } catch (e) {
+      setIsLoading(false);
+      setError(e.message);
+    }
+  };
+
   useEffect(() => {
-    const getEvents = async () => {
-      try {
-        setIsLoading(true);
-        const resp = await axios.get("/");
-        setIsLoading(false);
-        setCurrentEvents(resp.data);
-      } catch (e) {
-        setIsLoading(false);
-        setError(e.message);
-      }
-    };
     getEvents();
   }, []);
 
@@ -40,8 +41,21 @@ const Home = () => {
     }
 
     return currentEvents.map((item) => {
-      return <EventCard data={item} key={item.id} />;
+      return (
+        <EventCard data={item} key={item.id} handleDelete={handleDelete} />
+      );
     });
+  };
+
+  const handleDelete = async (eventID) => {
+    try {
+      setIsLoading(true);
+      await axios.delete(`/${eventID}`);
+      getEvents();
+    } catch (e) {
+      setIsLoading(false);
+      setError(e.message);
+    }
   };
 
   return (
