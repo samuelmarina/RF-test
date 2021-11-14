@@ -7,7 +7,7 @@ export const Container = styled.header`
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
 `;
 
-export const Title = styled.text`
+export const Title = styled.h1`
   color: #fff;
-  font-weight: bold;
+  font-weight: 500;
 `;
