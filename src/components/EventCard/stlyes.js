@@ -10,6 +10,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   text-align: left;
+  float: left;
 `;
 
 export const Title = styled.h1`

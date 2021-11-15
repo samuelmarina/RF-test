@@ -4,7 +4,7 @@ import EventCard from "../../components/EventCard";
 import Loader from "../../components/Loader";
 import axios from "../../constants/axios";
 import { propComparator } from "../../helpers/comparator";
-import { Text, ErrorText } from "./styles";
+import { Text, ErrorText, Container } from "./styles";
 import Alert from "../../components/Alert";
 
 const Home = () => {
@@ -68,7 +68,11 @@ const Home = () => {
   return (
     <div>
       <Header visible>Events</Header>
-      {isLoading ? <Loader size={50} /> : getAllEvents()}
+      {isLoading ? (
+        <Loader size={50} />
+      ) : (
+        <Container>{getAllEvents()}</Container>
+      )}
     </div>
   );
 };
