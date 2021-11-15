@@ -9,6 +9,10 @@ export default {
     description: "Description",
     company: "Company",
     color: "Color",
+    email: "Email",
+    address: "Address",
+    phone: "Phone",
+    date: "Date",
     isRequired: (value) => `${value} is required`,
     mustValid: (value) => `${value} must be valid`,
     errorLoading: "There was an error loading your event"

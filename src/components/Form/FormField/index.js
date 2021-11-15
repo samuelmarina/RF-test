@@ -4,7 +4,7 @@ import Input from "../../Input";
 import ErrorMessage from "../../ErrorMessage";
 import { Container } from "./styles";
 
-const FormField = ({ placeholder, name, width, holder, ...otherProps }) => {
+const FormField = ({ placeholder, name, width, ...otherProps }) => {
   const {
     values,
     setValues,

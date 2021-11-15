@@ -6,7 +6,8 @@ const Alert = ({ title, text, icon }) => {
     text,
     icon,
     buttons: false,
-    timer: 3000
+    timer: 3000,
+    customClass: ".sweet-alert button"
   });
 };
 

@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import Alert from "../../components/Alert";
 import AppForm from "../../components/Form";
 import FormField from "../../components/Form/FormField";
+import DateField from "../../components/Form/DateField";
 import Header from "../../components/Header";
 import SubmitButton from "../../components/Form/SubmitButton";
 import Loader from "../../components/Loader";
@@ -23,7 +24,11 @@ const Form = () => {
     name: "",
     description: "",
     company: "",
-    color: ""
+    color: "",
+    email: "",
+    address: "",
+    phone: "",
+    date: ""
   });
   const [headerText, setHeaderText] = useState(text.newEvent);
 
@@ -32,6 +37,10 @@ const Form = () => {
     description,
     company,
     color,
+    email,
+    address,
+    phone,
+    date,
     isRequired,
     mustValid,
     errorLoading
@@ -46,7 +55,13 @@ const Form = () => {
     company: Yup.string(mustValid(company))
       .required(isRequired(company))
       .label(company),
-    color: Yup.string(mustValid(color)).required(isRequired(color)).label(color)
+    color: Yup.string(mustValid(color))
+      .required(isRequired(color))
+      .label(color),
+    email: Yup.string(mustValid(email)).label(email),
+    address: Yup.string(mustValid(address)).label(address),
+    phone: Yup.string(mustValid(phone)).label(phone),
+    date: Yup.string(mustValid(date)).label(date)
   });
 
   const handleSubmit = (data) => {
@@ -152,9 +167,29 @@ const Form = () => {
               defaultValue={currentEvent.company}
             />
             <FormField
+              name="email"
+              placeholder={email}
+              defaultValue={currentEvent.email}
+            />
+            <FormField
+              name="address"
+              placeholder={address}
+              defaultValue={currentEvent.address}
+            />
+            <FormField
+              name="phone"
+              placeholder={phone}
+              defaultValue={currentEvent.phone}
+            />
+            <FormField
               name="color"
               placeholder={color}
               defaultValue={currentEvent.color}
+            />
+            <DateField
+              name="date"
+              placeholder={date}
+              defaultValue={currentEvent.date}
             />
             <SubmitButton title="Submit" />
           </AppForm>
