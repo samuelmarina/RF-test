@@ -15,6 +15,7 @@ const Home = () => {
     try {
       setIsLoading(true);
       const resp = await axios.get("/");
+      console.log(resp.data);
       setIsLoading(false);
       setCurrentEvents(resp.data.sort(propComparator("company")));
     } catch (e) {
@@ -24,6 +25,7 @@ const Home = () => {
   };
 
   useEffect(() => {
+    console.log("Hey");
     getEvents();
   }, []);
 

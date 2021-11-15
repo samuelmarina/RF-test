@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Container,
   Title,
@@ -13,6 +14,7 @@ import swal from "sweetalert";
 
 const EventCard = ({ data, handleDelete }) => {
   const { name, description, company, id } = data;
+  const navigate = useNavigate();
 
   const willDelete = async () => {
     const value = await swal({
@@ -34,13 +36,18 @@ const EventCard = ({ data, handleDelete }) => {
       handleDelete(id);
     }
   };
+
+  const handleEdit = () => {
+    navigate(`/form?id=${id}`);
+  };
+
   return (
     <Container>
       <Title>{name}</Title>
       <Content>{description}</Content>
       <Footer>{company}</Footer>
       <ButtonContainer>
-        <Button>
+        <Button onClick={handleEdit}>
           <EditIcon />
         </Button>
         <Button onClick={willDelete}>

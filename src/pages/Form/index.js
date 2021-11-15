@@ -8,12 +8,20 @@ import * as Yup from "yup";
 import axios from "../../constants/axios";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "../../hooks/useQuery";
+import { Text, ErrorText } from "./styles";
 
 const Form = () => {
   const query = useQuery();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [currentEvent, setCurrentEvent] = useState();
+  const [error, setError] = useState();
+  const [eventID, setEventID] = useState(query.get("id"));
+  const [currentEvent, setCurrentEvent] = useState({
+    name: "",
+    description: "",
+    company: "",
+    color: ""
+  });
   const [headerText, setHeaderText] = useState("New Event");
 
   const validationSchema = Yup.object().shape({
@@ -31,21 +39,23 @@ const Form = () => {
       .label("Color")
   });
 
-  const initialValues = {
-    name: "",
-    description: "",
-    company: "",
-    color: ""
-  };
-
   const handleSubmit = (data) => {
-    if (currentEvent) {
+    if (eventID) {
       return editEvent();
     }
     createNewEvent(data);
   };
 
-  const editEvent = () => {};
+  const editEvent = async (data) => {
+    try {
+      setIsLoading(true);
+      await axios.put(`/${eventID}`, currentEvent);
+      setIsLoading(false);
+      navigate("/");
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const createNewEvent = async (data) => {
     try {
@@ -53,32 +63,68 @@ const Form = () => {
       await axios.post("/", data);
       setIsLoading(false);
       navigate("/");
-    } catch (e) {}
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const getEvent = async (id) => {
+    try {
+      setIsLoading(true);
+      const resp = await axios.get(`/${id}`);
+      setCurrentEvent(resp.data);
+      setIsLoading(false);
+    } catch (e) {
+      setIsLoading(false);
+      setError(e.message);
+    }
   };
 
   useEffect(() => {
-    const eventID = query.get("id");
     if (eventID) {
-      setCurrentEvent(eventID);
+      setEventID(eventID);
+      getEvent(eventID);
       setHeaderText("Edit Event");
     }
-  }, []);
+  }, [eventID]);
 
   return (
     <>
       <Header>{headerText}</Header>
       {isLoading ? (
         <Loader />
+      ) : error ? (
+        <>
+          <Text>There was an error loading your event</Text>
+          <ErrorText>{error}</ErrorText>
+        </>
       ) : (
         <AppForm
+          initialValues={currentEvent}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
-          initialValues={initialValues}
         >
-          <FormField name="name" placeholder="Name" />
-          <FormField name="description" placeholder="Description" />
-          <FormField name="company" placeholder="Company" />
-          <FormField name="color" placeholder="Color" />
+          <FormField
+            name="name"
+            placeholder="Name"
+            defaultValue={currentEvent.name}
+          />
+          <FormField
+            name="description"
+            placeholder="Description"
+            defaultValue={currentEvent.description}
+          />
+          <FormField
+            name="company"
+            placeholder="Company"
+            initialValue={currentEvent.company}
+            defaultValue={currentEvent.company}
+          />
+          <FormField
+            name="color"
+            placeholder="Color"
+            defaultValue={currentEvent.color}
+          />
           <SubmitButton title="Submit" />
         </AppForm>
       )}

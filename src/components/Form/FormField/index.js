@@ -5,13 +5,25 @@ import ErrorMessage from "../../ErrorMessage";
 import { Container } from "./styles";
 
 const FormField = ({ placeholder, name, width, holder, ...otherProps }) => {
-  const { setFieldTouched, handleChange, errors, touched } = useFormikContext();
+  const {
+    values,
+    setValues,
+    setFieldTouched,
+    handleChange,
+    errors,
+    touched
+  } = useFormikContext();
   return (
     <Container>
       <Input
         onBlur={() => setFieldTouched(name)}
-        onChange={handleChange(name)}
+        onChange={(e) => {
+          const temp = values;
+          (values[name] = e.target.value), setValues(temp);
+          handleChange(name);
+        }}
         placeHolder={placeholder}
+        {...otherProps}
       />
       <ErrorMessage error={errors[name]} visible={touched[name]} />
     </Container>
