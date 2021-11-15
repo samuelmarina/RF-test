@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Container = styled.button`
-  background-color: #bb001b;
+  background-color: #929292;
   border-width: 0;
   border-radius: 5px;
   display: flex;
@@ -9,6 +9,7 @@ export const Container = styled.button`
   justify-content: center;
   padding: 10px;
   cursor: pointer;
+  margin-right: 10px;
 `;
 
 export const Text = styled.h1`

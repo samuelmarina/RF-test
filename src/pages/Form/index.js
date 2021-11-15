@@ -5,12 +5,13 @@ import { useQuery } from "../../hooks/useQuery";
 import * as Yup from "yup";
 import Alert from "../../components/Alert";
 import AppForm from "../../components/Form";
+import CancelButton from "../../components/Form/CancelButton";
 import FormField from "../../components/Form/FormField";
 import DateField from "../../components/Form/DateField";
 import Header from "../../components/Header";
 import SubmitButton from "../../components/Form/SubmitButton";
 import Loader from "../../components/Loader";
-import { Text, ErrorText, Container } from "./styles";
+import { Text, ErrorText, Container, ButtonsContainer } from "./styles";
 import text from "../../constants/text";
 import icon from "../../constants/icons";
 
@@ -191,7 +192,10 @@ const Form = () => {
               placeholder={date}
               defaultValue={currentEvent.date}
             />
-            <SubmitButton title="Submit" />
+            <ButtonsContainer>
+              <CancelButton title="Cancel" />
+              <SubmitButton title="Submit" />
+            </ButtonsContainer>
           </AppForm>
         </Container>
       )}

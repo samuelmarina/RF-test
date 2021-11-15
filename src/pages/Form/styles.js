@@ -15,3 +15,8 @@ export const ErrorText = styled.p`
   font-size: 0.9em;
   color: #9c9c9c;
 `;
+
+export const ButtonsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
