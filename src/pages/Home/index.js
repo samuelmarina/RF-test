@@ -60,7 +60,7 @@ const Home = () => {
 
   return (
     <div>
-      <Header>Events</Header>
+      <Header visible>Events</Header>
       {isLoading ? <Loader size={50} /> : getAllEvents()}
     </div>
   );

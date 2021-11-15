@@ -46,4 +46,5 @@ export const Button = styled.button`
   height: 36px;
   cursor: pointer;
   outline: none;
+  background-color: transparent;
 `;

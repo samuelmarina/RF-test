@@ -7,7 +7,6 @@ import Loader from "../../components/Loader";
 import * as Yup from "yup";
 import axios from "../../constants/axios";
 import { useNavigate } from "react-router-dom";
-
 import { useQuery } from "../../hooks/useQuery";
 
 const Form = () => {
@@ -68,17 +67,21 @@ const Form = () => {
   return (
     <>
       <Header>{headerText}</Header>
-      <AppForm
-        validationSchema={validationSchema}
-        onSubmit={handleSubmit}
-        initialValues={initialValues}
-      >
-        <FormField name="name" placeholder="Name" />
-        <FormField name="description" placeholder="Description" />
-        <FormField name="company" placeholder="Company" />
-        <FormField name="color" placeholder="Color" />
-        <SubmitButton title="Submit" />
-      </AppForm>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <AppForm
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+          initialValues={initialValues}
+        >
+          <FormField name="name" placeholder="Name" />
+          <FormField name="description" placeholder="Description" />
+          <FormField name="company" placeholder="Company" />
+          <FormField name="color" placeholder="Color" />
+          <SubmitButton title="Submit" />
+        </AppForm>
+      )}
     </>
   );
 };
