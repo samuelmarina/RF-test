@@ -19,7 +19,8 @@ const FormField = ({ placeholder, name, width, holder, ...otherProps }) => {
         onBlur={() => setFieldTouched(name)}
         onChange={(e) => {
           const temp = values;
-          (values[name] = e.target.value), setValues(temp);
+          values[name] = e.target.value;
+          setValues(temp);
           handleChange(name);
         }}
         placeHolder={placeholder}

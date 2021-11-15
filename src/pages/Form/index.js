@@ -9,6 +9,7 @@ import axios from "../../constants/axios";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "../../hooks/useQuery";
 import { Text, ErrorText } from "./styles";
+import Alert from "../../components/Alert";
 
 const Form = () => {
   const query = useQuery();
@@ -46,14 +47,23 @@ const Form = () => {
     createNewEvent(data);
   };
 
-  const editEvent = async (data) => {
+  const showError = (msg) => {
+    return Alert({
+      title: "There was an error",
+      text: `${msg}`,
+      icon: "error"
+    });
+  };
+
+  const editEvent = async () => {
     try {
       setIsLoading(true);
       await axios.put(`/${eventID}`, currentEvent);
       setIsLoading(false);
       navigate("/");
     } catch (e) {
-      console.log(e);
+      setIsLoading(false);
+      showError(e.message);
     }
   };
 
@@ -64,7 +74,8 @@ const Form = () => {
       setIsLoading(false);
       navigate("/");
     } catch (e) {
-      console.log(e);
+      setIsLoading(false);
+      showError(e.message);
     }
   };
 

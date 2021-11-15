@@ -5,6 +5,7 @@ import Loader from "../../components/Loader";
 import axios from "../../constants/axios";
 import { propComparator } from "../../helpers/comparator";
 import { Text, ErrorText } from "./styles";
+import Alert from "../../components/Alert";
 
 const Home = () => {
   const [currentEvents, setCurrentEvents] = useState([]);
@@ -15,7 +16,6 @@ const Home = () => {
     try {
       setIsLoading(true);
       const resp = await axios.get("/");
-      console.log(resp.data);
       setIsLoading(false);
       setCurrentEvents(resp.data.sort(propComparator("company")));
     } catch (e) {
@@ -25,7 +25,6 @@ const Home = () => {
   };
 
   useEffect(() => {
-    console.log("Hey");
     getEvents();
   }, []);
 
@@ -54,6 +53,11 @@ const Home = () => {
     try {
       setIsLoading(true);
       await axios.delete(`/${eventID}`);
+      Alert({
+        title: "Success",
+        text: "Your event was deleted successfully",
+        icon: "success"
+      });
       getEvents();
     } catch (e) {
       setIsLoading(false);
