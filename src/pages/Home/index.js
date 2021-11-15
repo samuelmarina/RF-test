@@ -3,6 +3,7 @@ import Header from "../../components/Header";
 import EventCard from "../../components/EventCard";
 import Loader from "../../components/Loader";
 import axios from "../../constants/axios";
+import { propComparator } from "../../helpers/comparator";
 import { Text, ErrorText } from "./styles";
 
 const Home = () => {
@@ -15,7 +16,7 @@ const Home = () => {
       setIsLoading(true);
       const resp = await axios.get("/");
       setIsLoading(false);
-      setCurrentEvents(resp.data);
+      setCurrentEvents(resp.data.sort(propComparator("company")));
     } catch (e) {
       setIsLoading(false);
       setError(e.message);
