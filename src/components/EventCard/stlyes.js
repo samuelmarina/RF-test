@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   background: #fff;
+  border-width: 0;
   border-radius: 7px;
   box-shadow: 0 2px 5px #ccc;
   padding: 10px;
@@ -33,8 +34,11 @@ export const Footer = styled.p`
 
 export const ButtonContainer = styled.div`
   display: flex;
+  width: 100%;
+  height: 100%;
   flex-direction: row;
   justify-content: right;
+  align-items: flex-end;
 `;
 
 export const Button = styled.button`

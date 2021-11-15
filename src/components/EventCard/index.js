@@ -11,17 +11,20 @@ import {
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import swal from "sweetalert";
+import icons from "../../constants/icons";
+import text from "../../constants/text";
 
 const EventCard = ({ data, handleDelete }) => {
   const { name, description, company, id } = data;
   const navigate = useNavigate();
+  const { deletePrompt } = text.modal;
 
   const willDelete = async () => {
     const value = await swal({
-      text: "Are you sure you want to delete this event?",
+      text: deletePrompt,
       buttons: {
         cancel: {
-          text: "Cancel",
+          text: text.cancel,
           value: null,
           visible: true
         },
@@ -29,7 +32,8 @@ const EventCard = ({ data, handleDelete }) => {
           value: true,
           visible: true
         }
-      }
+      },
+      icon: icons.warning
     });
 
     if (value) {

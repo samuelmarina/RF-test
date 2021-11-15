@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
-import Header from "../../components/Header";
-import AppForm from "../../components/Form";
-import FormField from "../../components/Form/FormField";
-import SubmitButton from "../../components/Form/SubmitButton";
-import Loader from "../../components/Loader";
-import * as Yup from "yup";
 import axios from "../../constants/axios";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "../../hooks/useQuery";
-import { Text, ErrorText } from "./styles";
+import * as Yup from "yup";
 import Alert from "../../components/Alert";
+import AppForm from "../../components/Form";
+import FormField from "../../components/Form/FormField";
+import Header from "../../components/Header";
+import SubmitButton from "../../components/Form/SubmitButton";
+import Loader from "../../components/Loader";
+import { Text, ErrorText, Container } from "./styles";
+import text from "../../constants/text";
+import icon from "../../constants/icons";
 
 const Form = () => {
   const query = useQuery();
@@ -23,21 +25,28 @@ const Form = () => {
     company: "",
     color: ""
   });
-  const [headerText, setHeaderText] = useState("New Event");
+  const [headerText, setHeaderText] = useState(text.newEvent);
+
+  const {
+    name,
+    description,
+    company,
+    color,
+    isRequired,
+    mustValid,
+    errorLoading
+  } = text.form;
+  const { wohooTitle, ohNoTitle, editSuccess, createSuccess } = text.modal;
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string("Name must be valid")
-      .required("Name is required")
-      .label("Name"),
-    description: Yup.string("Description must be valid")
-      .required("Description is required")
-      .label("Description"),
-    company: Yup.string("Company must be valid")
-      .required("Company is required")
-      .label("Company"),
-    color: Yup.string("Color must be valid")
-      .required("Color is required")
-      .label("Color")
+    name: Yup.string(mustValid(name)).required(isRequired(name)).label(name),
+    description: Yup.string(mustValid(description))
+      .required(isRequired(description))
+      .label(description),
+    company: Yup.string(mustValid(company))
+      .required(isRequired(company))
+      .label(company),
+    color: Yup.string(mustValid(color)).required(isRequired(color)).label(color)
   });
 
   const handleSubmit = (data) => {
@@ -49,9 +58,17 @@ const Form = () => {
 
   const showError = (msg) => {
     return Alert({
-      title: "There was an error",
+      title: ohNoTitle,
       text: `${msg}`,
-      icon: "error"
+      icon: icon.error
+    });
+  };
+
+  const showSuccess = (msg) => {
+    return Alert({
+      title: wohooTitle,
+      text: `${msg}`,
+      icon: icon.success
     });
   };
 
@@ -59,6 +76,7 @@ const Form = () => {
     try {
       setIsLoading(true);
       await axios.put(`/${eventID}`, currentEvent);
+      await showSuccess(editSuccess);
       setIsLoading(false);
       navigate("/");
     } catch (e) {
@@ -71,6 +89,7 @@ const Form = () => {
     try {
       setIsLoading(true);
       await axios.post("/", data);
+      await showSuccess(createSuccess);
       setIsLoading(false);
       navigate("/");
     } catch (e) {
@@ -95,7 +114,7 @@ const Form = () => {
     if (eventID) {
       setEventID(eventID);
       getEvent(eventID);
-      setHeaderText("Edit Event");
+      setHeaderText(text.editEvent);
     }
   }, [eventID]);
 
@@ -106,38 +125,40 @@ const Form = () => {
         <Loader />
       ) : error ? (
         <>
-          <Text>There was an error loading your event</Text>
+          <Text>{errorLoading}</Text>
           <ErrorText>{error}</ErrorText>
         </>
       ) : (
-        <AppForm
-          initialValues={currentEvent}
-          validationSchema={validationSchema}
-          onSubmit={handleSubmit}
-        >
-          <FormField
-            name="name"
-            placeholder="Name"
-            defaultValue={currentEvent.name}
-          />
-          <FormField
-            name="description"
-            placeholder="Description"
-            defaultValue={currentEvent.description}
-          />
-          <FormField
-            name="company"
-            placeholder="Company"
-            initialValue={currentEvent.company}
-            defaultValue={currentEvent.company}
-          />
-          <FormField
-            name="color"
-            placeholder="Color"
-            defaultValue={currentEvent.color}
-          />
-          <SubmitButton title="Submit" />
-        </AppForm>
+        <Container>
+          <AppForm
+            initialValues={currentEvent}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+          >
+            <FormField
+              name="name"
+              placeholder={name}
+              defaultValue={currentEvent.name}
+            />
+            <FormField
+              name="description"
+              placeholder={description}
+              defaultValue={currentEvent.description}
+            />
+            <FormField
+              name="company"
+              placeholder={company}
+              initialValue={currentEvent.company}
+              defaultValue={currentEvent.company}
+            />
+            <FormField
+              name="color"
+              placeholder={color}
+              defaultValue={currentEvent.color}
+            />
+            <SubmitButton title="Submit" />
+          </AppForm>
+        </Container>
       )}
     </>
   );

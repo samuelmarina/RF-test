@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react";
-import Header from "../../components/Header";
-import EventCard from "../../components/EventCard";
-import Loader from "../../components/Loader";
 import axios from "../../constants/axios";
 import { propComparator } from "../../helpers/comparator";
-import { Text, ErrorText, Container } from "./styles";
+import text from "../../constants/text";
+import icon from "../../constants/icons";
 import Alert from "../../components/Alert";
+import EventCard from "../../components/EventCard";
+import Header from "../../components/Header";
+import Loader from "../../components/Loader";
+import { Text, ErrorText, Container, InnerContainer } from "./styles";
 
 const Home = () => {
   const [currentEvents, setCurrentEvents] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
+  const { successTitle, errorTitle, deleteSuccess } = text.modal;
 
   const getEvents = async () => {
     try {
@@ -31,22 +34,24 @@ const Home = () => {
   const getAllEvents = () => {
     if (error) {
       return (
-        <>
-          <Text>There was an error loading your events</Text>
+        <InnerContainer>
+          <Text>{text.loadingEventError}</Text>
           <ErrorText>{error}</ErrorText>
-        </>
+        </InnerContainer>
       );
     }
 
     if (currentEvents.length === 0) {
-      return <Text>You have no current events</Text>;
+      return <Text>{text.emptyEvents}</Text>;
     }
 
-    return currentEvents.map((item) => {
-      return (
-        <EventCard data={item} key={item.id} handleDelete={handleDelete} />
-      );
-    });
+    return (
+      <Container>
+        {currentEvents.map((item) => (
+          <EventCard data={item} key={item.id} handleDelete={handleDelete} />
+        ))}
+      </Container>
+    );
   };
 
   const handleDelete = async (eventID) => {
@@ -54,25 +59,25 @@ const Home = () => {
       setIsLoading(true);
       await axios.delete(`/${eventID}`);
       Alert({
-        title: "Success",
-        text: "Your event was deleted successfully",
-        icon: "success"
+        title: successTitle,
+        text: deleteSuccess,
+        icon: icon.success
       });
       getEvents();
     } catch (e) {
       setIsLoading(false);
-      setError(e.message);
+      Alert({
+        title: errorTitle,
+        text: `${e.message}`,
+        icon: icon.error
+      });
     }
   };
 
   return (
     <div>
-      <Header visible>Events</Header>
-      {isLoading ? (
-        <Loader size={50} />
-      ) : (
-        <Container>{getAllEvents()}</Container>
-      )}
+      <Header visible>{text.events}</Header>
+      {isLoading ? <Loader size={50} /> : getAllEvents()}
     </div>
   );
 };

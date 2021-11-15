@@ -6,6 +6,11 @@ export const Container = styled.div`
   flex-wrap: wrap;
 `;
 
+export const InnerContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 export const Text = styled.h1`
   margin-top: 10px;
   font-size: 1.1em;

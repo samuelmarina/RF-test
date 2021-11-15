@@ -1,5 +1,10 @@
 import styled from "styled-components";
 
+export const Container = styled.div`
+  margin-top: 10px;
+  margin-bottom: 10px;
+`;
+
 export const Text = styled.h1`
   margin-top: 10px;
   font-size: 1.1em;
